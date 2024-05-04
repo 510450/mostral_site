@@ -1,209 +1,279 @@
-/*  ---------------------------------------------------
-    Template Name: Dreams
-    Description: Dreams wedding template
-    Author: Colorib
-    Author URI: https://colorlib.com/
-    Version: 1.0
-    Created: Colorib
----------------------------------------------------------  */
-
-'use strict';
-
 (function ($) {
-
-    /*------------------
-        Preloader
-    --------------------*/
-    $(window).on('load', function () {
-        $(".loader").fadeOut();
-        $("#preloder").delay(200).fadeOut("slow");
-
-        /*------------------
-            Portfolio filter
-        --------------------*/
-        $('.portfolio__filter li').on('click', function () {
-            $('.portfolio__filter li').removeClass('active');
-            $(this).addClass('active');
-        });
-        if ($('.portfolio__gallery').length > 0) {
-            var containerEl = document.querySelector('.portfolio__gallery');
-            var mixer = mixitup(containerEl);
+    "use strict";
+    
+    // Dropdown on mouse hover
+    $(document).ready(function () {
+        function toggleNavbarMethod() {
+            if ($(window).width() > 992) {
+                $('.navbar .dropdown').on('mouseover', function () {
+                    $('.dropdown-toggle', this).trigger('click');
+                }).on('mouseout', function () {
+                    $('.dropdown-toggle', this).trigger('click').blur();
+                });
+            } else {
+                $('.navbar .dropdown').off('mouseover').off('mouseout');
+            }
         }
+        toggleNavbarMethod();
+        $(window).resize(toggleNavbarMethod);
     });
-
-    /*------------------
-        Background Set
-    --------------------*/
-    $('.set-bg').each(function () {
-        var bg = $(this).data('setbg');
-        $(this).css('background-image', 'url(' + bg + ')');
-    });
-
-    //Masonary
-    $('.work__gallery').masonry({
-        itemSelector: '.work__item',
-        columnWidth: '.grid-sizer',
-        gutter: 10
-    });
-
-    /*------------------
-		Navigation
-	--------------------*/
-    $(".mobile-menu").slicknav({
-        prependTo: '#mobile-menu-wrap',
-        allowParentLinks: true
-    });
-
-    /*------------------
-		Hero Slider
-	--------------------*/
-    $('.hero__slider').owlCarousel({
-        loop: true,
-        dots: true,
-        mouseDrag: false,
-        animateOut: 'fadeOut',
-        animateIn: 'fadeIn',
-        items: 1,
-        margin: 0,
-        smartSpeed: 1200,
-        autoHeight: false,
-        autoplay: true,
-    });
-
-    var dot = $('.hero__slider .owl-dot');
-    dot.each(function () {
-        var index = $(this).index() + 1;
-        if (index < 10) {
-            $(this).html('0').append(index);
+    
+    
+    // Back to top button
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            $('.back-to-top').fadeIn('slow');
         } else {
-            $(this).html(index);
+            $('.back-to-top').fadeOut('slow');
         }
     });
-
-    /*------------------
-        Testimonial Slider
-    --------------------*/
-    $(".testimonial__slider").owlCarousel({
-        loop: true,
-        margin: 0,
-        items: 3,
-        dots: true,
-        dotsEach: 2,
-        smartSpeed: 1200,
-        autoHeight: false,
-        autoplay: true,
-        responsive: {
-            992: {
-                items: 3
-            },
-            768: {
-                items: 2
-            },
-            320: {
-                items: 1
-            }
-        }
+    $('.back-to-top').click(function () {
+        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        return false;
     });
 
-    /*------------------
-        Latest Slider
-    --------------------*/
-    $(".latest__slider").owlCarousel({
-        loop: true,
-        margin: 0,
-        items: 3,
-        dots: true,
-        dotsEach: 2,
-        smartSpeed: 1200,
-        autoHeight: false,
-        autoplay: true,
-        responsive: {
-            992: {
-                items: 3
-            },
-            768: {
-                items: 2
-            },
-            320: {
-                items: 1
-            }
-        }
+
+    // Facts counter
+    $('[data-toggle="counter-up"]').counterUp({
+        delay: 10,
+        time: 2000
     });
 
-    /*------------------
-        Logo Slider
-    --------------------*/
-    $(".logo__carousel").owlCarousel({
-        loop: true,
-        margin: 100,
-        items: 6,
-        dots: false,
-        smartSpeed: 1200,
-        autoHeight: false,
-        autoplay: true,
-        responsive: {
-            992: {
-                items: 5
-            },
-            768: {
-                items: 4
-            },
-            480: {
-                items: 3
-            },
-            320: {
-                items: 2
-            }
-        }
-    });
 
-    /*------------------
-        Video Popup
-    --------------------*/
-    $('.video-popup').magnificPopup({
-        type: 'iframe'
-    });
-
-    /*------------------
-        Counter
-    --------------------*/
-    $('.counter_num').each(function () {
-        $(this).prop('Counter', 0).animate({
-            Counter: $(this).text()
-        }, {
-            duration: 4000,
-            easing: 'swing',
-            step: function (now) {
-                $(this).text(Math.ceil(now));
-            }
+    // Modal Video
+    $(document).ready(function () {
+        var $videoSrc;
+        $('.btn-play').click(function () {
+            $videoSrc = $(this).data("src");
         });
+        console.log($videoSrc);
+
+        $('#videoModal').on('shown.bs.modal', function (e) {
+            $("#video").attr('src', $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
+        })
+
+        $('#videoModal').on('hide.bs.modal', function (e) {
+            $("#video").attr('src', $videoSrc);
+        })
     });
 
+
+    // Testimonials carousel
+    $(".testimonial-carousel").owlCarousel({
+        center: true,
+        autoplay: true,
+        smartSpeed: 1500,
+        margin: 30,
+        dots: true,
+        loop: true,
+        responsive: {
+            0:{
+                items:1
+            },
+            576:{
+                items:1
+            },
+            768:{
+                items:2
+            },
+            992:{
+                items:3
+            }
+        }
+    });
+    
 })(jQuery);
-$(document).on("click", "#whatsapp-popup", function() {
-  
-    $(".whatsapp-wrapper").toggleClass("hide-whatsapp show-whatsapp");
-    setTimeout(function(){
-      $('.loading-animation').hide();
-      $('.whatsapp-message-wrapper').css("display", "flex").hide().fadeIn("slow");
-    }, 1000)
+
+
+
+
+
+
+
+$(document).ready(function(){
+    $("#myModal").modal('show');
+  });
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const closeToggle = document.querySelector('.close-toggle');
+    const offcanvasMenu = document.querySelector('.offcanvas-menu');
+    const overlay_offcanvas = document.querySelector('.overlay_offcanvas')
+    menuToggle.addEventListener('click', function () {
+      offcanvasMenu.style.display = "block";
+      offcanvasMenu.style.animation = "entrada_sidebar normal 1s";
+      overlay_offcanvas.style.display = "block"
+    });
+
+    closeToggle.addEventListener('click', function () {
+      offcanvasMenu.style.animation = "saida_sidebar normal 1.5s";
+
+      setTimeout(function() {
+        offcanvasMenu.style.display = "none";
+        overlay_offcanvas.style.display = "none"
+
+      }, 1500); // Definindo um atraso de 1 segundo para esconder a offcanvas menu após a animação de saída
+    });
   });
   
-  $(document).on("click", ".close_whatsapp", function() {
-      $("#whatsapp-chat")
-        $(".whatsapp-wrapper").toggleClass("hide-whatsapp show-whatsapp");
+  $(document).ready(function(){
+    var slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+      var slides = $(".slideshow").children("p");
+      for (var i = 0; i < slides.length; i++) {
+        $(slides[i]).css("display", "none");  
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) {slideIndex = 1}    
+      $(slides[slideIndex-1]).css("display", "block");  
+      setTimeout(showSlides,1000); // Troca a cada 5 segundos
+    }
+  });
+
+
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const navItems = document.querySelectorAll('.nav-item-page');
+
+    navItems.forEach(item => {
+      item.addEventListener('click', function(event) {
+        event.preventDefault();
+        const target = this.getAttribute('data-target');
+        scrollToSection(target);
+      });
     });
-    $(document).ready(function() {
-        var header = $('#header');
-        var headerHeight = header.outerHeight();
-    
-        $(window).scroll(function() {
-            if ($(this).scrollTop() > headerHeight) {
-                header.addClass('fixed');
-                header.addClass('slide-up');
-            } else {
-                header.removeClass('fixed');
-                header.removeClass('slide-up');
-            }
-        });
+
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  });
+
+
+  // Função para rolar automaticamente os cards
+  function scrollSlider() {
+    const slider = document.querySelector('.slider_beneficios');
+    const cards = document.querySelectorAll('.card');
+    let scrollAmount = 0;
+    const cardWidth = cards[0].offsetWidth + 20; // Largura do card + margem direita
+
+    setInterval(() => {
+      slider.scrollTo({
+        top: 0,
+        left: (scrollAmount += cardWidth),
+        behavior: 'smooth'
+      });
+
+      if (scrollAmount >= (cards.length - 1) * cardWidth) {
+        scrollAmount = 0;
+      }
+    }, 10000); // Altere o valor para ajustar a velocidade da rolagem
+  }
+
+  window.onload = scrollSlider;
+
+  let isDragging = false;
+  let startPosition = 0;
+  let currentScrollLeft = 0;
+
+  function startDrag(event) {
+    isDragging = true;
+    startPosition = event.clientX;
+    currentScrollLeft = document.querySelector('.slider_beneficios').scrollLeft;
+
+  }
+
+  function dragging(event) {
+    if (!isDragging) return;
+    const slider = document.querySelector('.slider_beneficios');
+    const scrollDistance = event.clientX - startPosition;
+    slider.scrollLeft = currentScrollLeft - scrollDistance;
+  }
+
+  function endDrag(event) {
+    isDragging = false;
+  }
+
+  window.addEventListener('scroll', function() {
+    var navigation = document.getElementById('navigation');
+    var distanceToBottom = document.documentElement.scrollHeight - (window.innerHeight + window.scrollY);
+  
+    if (distanceToBottom < 500) {
+      navigation.classList.add('hide-navigation');
+    } else {
+      navigation.classList.remove('hide-navigation');
+    }
+  });
+
+
+  let startScroll = 0;
+  let startCardIndex = 0;
+  
+  const cardWidth = document.querySelector('.carousel_max_item').offsetWidth + 15; // Largura do card + margem direita
+  
+  function startDrag(event) {
+    isDragging = true;
+    startPosition = event.clientX;
+    startScroll = document.querySelector('.carousel_max').scrollLeft;
+    startCardIndex = Math.floor((startScroll + startPosition) / cardWidth);
+  }
+  
+  function dragging(event) {
+    if (!isDragging) return;
+    const deltaX = event.clientX - startPosition;
+    const deltaScroll = deltaX * (cardWidth / Math.abs(deltaX)); // Mantém a direção do movimento
+    document.querySelector('.carousel_max').scrollLeft = startScroll - deltaScroll;
+  }
+  
+  function endDrag(event) {
+    isDragging = false;
+  }
+  
+  const carousel = document.querySelector('.carousel_max');
+  
+  carousel.addEventListener('mousedown', startDrag);
+  carousel.addEventListener('mousemove', dragging);
+  carousel.addEventListener('mouseup', endDrag);
+  carousel.addEventListener('mouseleave', endDrag);
+  
+
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('whatsapp_formatador').addEventListener('input', function (e) {
+        let input = e.target.value.replace(/\D/g, '').substring(0, 11); // Remove caracteres não numéricos e limita a 11 caracteres
+        let formattedInput = '';
+
+        if (input.length > 0) {
+            formattedInput += '(' + input.substring(0, 2) + ')'; // Adiciona o código de área
+        }
+        if (input.length > 2) {
+            formattedInput += ' ' + input.substring(2, 7); // Adiciona os primeiros cinco dígitos
+        }
+        if (input.length > 7) {
+            formattedInput += ' ' + input.substring(7); // Adiciona os últimos quatro dígitos
+        }
+
+        e.target.value = formattedInput;
     });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  const questions = document.querySelectorAll('.question');
+
+  questions.forEach(question => {
+      question.addEventListener('click', function() {
+          const answer = this.nextElementSibling;
+          if (answer.style.display === 'block') {
+              answer.style.display = 'none';
+          } else {
+              answer.style.display = 'block';
+          }
+      });
+  });
+});
